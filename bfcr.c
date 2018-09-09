@@ -72,6 +72,8 @@ int main(void) {
         i++;
     }
     while (l<n){
+        if (l!=0)
+            printf("\n");
         k=0;
         while (k<m[l]){
             print[l]=lista[l]->primeiro;
@@ -89,7 +91,6 @@ int main(void) {
             k++;
         }
         l++;
-        printf("\n");
     }
     return 0;
 }
