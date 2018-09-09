@@ -11,7 +11,7 @@
 
 typedef struct chave{
     int id;
-    int mod;
+    //int mod;
     struct chave *proximo;
 }chaveIn;
 
@@ -22,11 +22,10 @@ typedef struct fila{
 }filaIn;
 
 
-void addlista(struct fila *lista, int add, int mol){
-    struct chave *novo;
-    novo=malloc(sizeof(struct chave));
+void addlista(filaIn *lista, int add, int mol){
+    chaveIn *novo=malloc(sizeof(chaveIn));
     novo->id=add;
-    novo->mod=add%mol;
+    //novo->mod=add%mol;
     novo->proximo=NULL;
     if (lista->primeiro==NULL){
         lista->primeiro=novo;
@@ -56,37 +55,37 @@ void dellista (struct fila *lista, int del){
 }
 
 int main(void) {
-    int n,i=0,j,k,add,count,l=0;
-    struct chave *print;
+    int n,i=0,j,k,add,count,l=0,mol;
+    chaveIn *print=malloc(sizeof(chaveIn));
     scanf("%d",&n);
-    struct fila *lista[n];
+    filaIn *lista[n];
     int m[n],c[n];
     while (i<n){
-        lista[i]=malloc(sizeof(struct fila));
+        lista[i]=malloc(sizeof(filaIn));
         scanf("%d %d",&m[i],&c[i]);
         lista[i]->total=c[i];
-        for(j=0; j<c[i]; j++){
-            scanf("%d ",&add);
+        j=c[i];
+        while(j--){
+            scanf("%d",&add);
             addlista(lista[i],add,m[i]);
         }
         i++;
     }
     while (l<n){
-        for(k=0; k<m[l]; k++){
+        for(k=0;k<m[l];k++){
             print=lista[l]->primeiro;
             printf("%d -> ",k);
-            count=0;
-            while(count<=m[l]){
-                if (print->mod==k){
+            count=c[l];
+            while(count--){
+                mol=(print->id)%m[l];
+                if (mol==k)
                     printf("%d -> ",print->id);
-                    //dellista(lista[l],print->id);
-                }
                 print=print->proximo;
-                count++;
             }
             printf("\\\n");
         }
         l++;
+        printf("\n");
     }
     return 0;
 }
