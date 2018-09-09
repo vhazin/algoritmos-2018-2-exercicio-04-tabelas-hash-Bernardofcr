@@ -11,7 +11,6 @@
 
 typedef struct chave{
     int id;
-    //int mod;
     struct chave *proximo;
 }chaveIn;
 
@@ -22,10 +21,10 @@ typedef struct fila{
 }filaIn;
 
 
-void addlista(filaIn *lista, int add, int mol){
-    chaveIn *novo=malloc(sizeof(chaveIn));
+void addlista(filaIn *lista, int add){
+    chaveIn *novo;
+    novo=(chaveIn*)malloc(sizeof(chaveIn));
     novo->id=add;
-    //novo->mod=add%mol;
     novo->proximo=NULL;
     if (lista->primeiro==NULL){
         lista->primeiro=novo;
@@ -45,7 +44,7 @@ void dellista (struct fila *lista, int del){
             if (ant==NULL)
                 lista->primeiro=aux->proximo;
             lista->total=(lista->total)-1;
-            
+            free(aux);
             return;
         }
         ant=aux;
@@ -56,33 +55,38 @@ void dellista (struct fila *lista, int del){
 
 int main(void) {
     int n,i=0,j,k,add,count,l=0,mol;
-    chaveIn *print=malloc(sizeof(chaveIn));
     scanf("%d",&n);
     filaIn *lista[n];
+    chaveIn *print[n];
     int m[n],c[n];
     while (i<n){
         lista[i]=malloc(sizeof(filaIn));
+        print[i]=malloc(sizeof(chaveIn));
         scanf("%d %d",&m[i],&c[i]);
         lista[i]->total=c[i];
         j=c[i];
         while(j--){
             scanf("%d",&add);
-            addlista(lista[i],add,m[i]);
+            addlista(lista[i],add);
         }
         i++;
     }
     while (l<n){
-        for(k=0;k<m[l];k++){
-            print=lista[l]->primeiro;
+        k=0;
+        while (k<m[l]){
+            print[l]=lista[l]->primeiro;
             printf("%d -> ",k);
             count=c[l];
             while(count--){
-                mol=(print->id)%m[l];
-                if (mol==k)
-                    printf("%d -> ",print->id);
-                print=print->proximo;
+                mol=(print[l]->id)%m[l];
+                if (mol==k){
+                    printf("%d -> ",print[l]->id);
+                    dellista(lista[l],print[l]->id);
+                }
+                print[l]=print[l]->proximo;
             }
             printf("\\\n");
+            k++;
         }
         l++;
         printf("\n");
